@@ -8,7 +8,7 @@ function Dashboard() {
   const [filter, setFilter] = useState("all")
   const [loading, setLoading] = useState(true)
 
-  const API = "http://localhost:5000/tasks"
+  const API = `${import.meta.env.VITE_API_URL}/tasks`
 
   const fetchTasks = async () => {
     try {
@@ -107,7 +107,7 @@ function Dashboard() {
 
       <h1>Task Manager</h1>
 
-      <button  className="logout-btn"onClick={logout} style={{marginBottom:"20px"}}>
+      <button className="logout-btn" onClick={logout} style={{ marginBottom: "20px" }}>
         Logout
       </button>
 
@@ -115,8 +115,8 @@ function Dashboard() {
 
         <input
           value={title}
-          onChange={(e)=>setTitle(e.target.value)}
-          onKeyDown={(e)=> e.key === "Enter" && addTask()}
+          onChange={(e) => setTitle(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && addTask()}
           placeholder="Enter task..."
         />
 
@@ -128,9 +128,9 @@ function Dashboard() {
 
       <div className="filter-buttons">
 
-        <button onClick={()=>setFilter("all")}>All</button>
-        <button onClick={()=>setFilter("completed")}>Completed</button>
-        <button onClick={()=>setFilter("pending")}>Pending</button>
+        <button onClick={() => setFilter("all")}>All</button>
+        <button onClick={() => setFilter("completed")}>Completed</button>
+        <button onClick={() => setFilter("pending")}>Pending</button>
 
       </div>
 
@@ -144,7 +144,7 @@ function Dashboard() {
 
         <div className="task" key={task._id}>
 
-          <div style={{display:"flex",alignItems:"center",gap:"10px"}}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
 
             <input
               type="checkbox"
@@ -158,7 +158,7 @@ function Dashboard() {
 
           </div>
 
-          <button 
+          <button
             className="delete-btn"
             onClick={() => deleteTask(task._id)}
           >

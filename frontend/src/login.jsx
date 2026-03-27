@@ -7,7 +7,7 @@ function Login() {
 
   const handleLogin = async () => {
 
-    const res = await fetch("http://localhost:5000/login", {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -26,37 +26,37 @@ function Login() {
   }
 
   return (
-  <div className="auth-container">
+    <div className="auth-container">
 
-    <div className="auth-card">
+      <div className="auth-card">
 
-      <h1>Login</h1>
+        <h1>Login</h1>
 
-      <input
-        placeholder="Email"
-        value={email}
-        onChange={(e)=>setEmail(e.target.value)}
-      />
+        <input
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e)=>setPassword(e.target.value)}
-      />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-      <button className="auth-btn" onClick={handleLogin}>
-        Login
-      </button>
+        <button className="auth-btn" onClick={handleLogin}>
+          Login
+        </button>
 
-      <p className="auth-text">
-        Don't have an account? <a href="/signup">Signup</a>
-      </p>
+        <p className="auth-text">
+          Don't have an account? <a href="/signup">Signup</a>
+        </p>
+
+      </div>
 
     </div>
-
-  </div>
-)
+  )
 }
 
 export default Login
