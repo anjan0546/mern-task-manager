@@ -58,6 +58,8 @@ app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body
 
+    console.log("EMAIL:", email)
+
     const user = await User.findOne({ email })
 
     if (!user) {
@@ -70,44 +72,20 @@ app.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Invalid password" })
     }
 
+    if (!process.env.JWT_SECRET) {
+      return res.status(500).json({ message: "JWT missing" })
+    }
+
     const token = jwt.sign(
       { userId: user._id },
-      process.env.JWT_SECRET   // 🔥 FIXED
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
     )
 
     res.json({ token })
 
   } catch (err) {
-    res.status(500).json({ error: err.message })
-  }
-})
-
-/* ------------------ TASK ROUTES ------------------ */
-
-// GET tasks
-app.get("/tasks", authMiddleware, async (req, res) => {
-  const tasks = await Task.find({ userId: req.userId })
-  res.json(tasks)
-})
-
-// ADD task
-app.post("/tasks", authMiddleware, async (req, res) => {
-  try {
-    const { title } = req.body
-
-    if (!title || title.trim() === "") {
-      return res.status(400).json({ message: "Title required" })
-    }
-
-    const newTask = new Task({
-      title,
-      userId: req.userId
-    })
-
-    const savedTask = await newTask.save()
-    res.json(savedTask)
-
-  } catch (err) {
+    console.log("LOGIN ERROR:", err)
     res.status(500).json({ error: err.message })
   }
 })
@@ -136,4 +114,7 @@ app.delete("/tasks/:id", authMiddleware, async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message })
   }
+})
+app.listen(process.env.PORT || 5000, () => {
+  console.log("Server running")
 })
