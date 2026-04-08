@@ -34,24 +34,36 @@ app.listen(process.env.PORT, ()=>{
 // SIGNUP
 app.post("/signup", async (req, res) => {
   try {
-    const { name, email, password } = req.body
+    console.log("BODY:", req.body); // 🔥 ADD THIS
 
-    const hashedPassword = await bcrypt.hash(password, 10)
+    const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: "All fields required" });
+    }
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = new User({
       name,
       email,
       password: hashedPassword
-    })
+    });
 
-    await user.save()
+    await user.save();
 
-    res.json({ message: "User created successfully" })
+    res.json({ message: "User created successfully" });
 
   } catch (err) {
-    res.status(500).json({ error: err.message })
+    console.log("🔥 SIGNUP ERROR:", err); // 🔥 VERY IMPORTANT
+    res.status(500).json({ error: err.message });
   }
-})
+});
 
 // LOGIN
 app.post("/login", async (req, res) => {
@@ -115,6 +127,40 @@ app.delete("/tasks/:id", authMiddleware, async (req, res) => {
     res.status(500).json({ error: err.message })
   }
 })
+
+
+app.post("/tasks", authMiddleware, async (req, res) => {
+  try {
+    const { title } = req.body;
+
+    if (!title || title.trim() === "") {
+      return res.status(400).json({ message: "Title required" });
+    }
+
+    const newTask = new Task({
+      title,
+      userId: req.userId
+    });
+
+    const savedTask = await newTask.save();
+    res.json(savedTask);
+
+  } catch (err) {
+    console.log("ADD TASK ERROR:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get("/tasks", authMiddleware, async (req, res) => {
+  try {
+    const tasks = await Task.find({ userId: req.userId });
+    res.json(tasks);
+  } catch (err) {
+    console.log("GET TASK ERROR:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.listen(process.env.PORT || 5000, () => {
   console.log("Server running")
 })
