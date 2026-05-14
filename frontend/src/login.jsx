@@ -17,22 +17,21 @@ function Login() {
         }
       );
 
-      // ❗ check response before parsing
       if (!res.ok) {
-        throw new Error("Request failed");
+        const errorData = await res.json();
+        alert(errorData.message || "Login failed ❌");
+        return;
       }
 
       const data = await res.json();
 
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-        alert("Login successful ✅");
-        window.location.href = "/";
-      } else {
-        alert("Login failed ❌");
-      }
+      localStorage.setItem("token", data.token);
+
+      alert("Login successful ✅");
+
+      window.location.href = "/";
     } catch (error) {
-      console.error("Error:", error);
+      console.error("LOGIN ERROR:", error);
       alert("Server error ❌");
     }
   };
