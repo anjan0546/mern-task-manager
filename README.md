@@ -20,7 +20,8 @@ A full-stack task management application built using MongoDB, Express.js, React.
 - JWT
 
   ## use cases
-  - it is very useful for students and working proffesionals who want to track their tasks
+  - it is very useful for students and working proffesionals who want to track their tasks!
+  
 
 ## Live Demo
 
