@@ -19,6 +19,9 @@ A full-stack task management application built using MongoDB, Express.js, React.
 - MongoDB
 - JWT
 
+  ## use cases
+  - it is very useful for students and working proffesionals who want to track their tasks
+
 ## Live Demo
 
 https://mern-task-manager-dusky.vercel.app
